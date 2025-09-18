@@ -1,60 +1,54 @@
-const multer = require('multer');
-const path = require('path');
+const multer = require("multer");
+const path = require("path");
 
-// Configure storage for posts
+// === Storage for posts ===
 const postStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/posts/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `post-${Date.now()}${path.extname(file.originalname)}`);
-  }
+  destination: (req, file, cb) => cb(null, "uploads/posts/"),
+  filename: (req, file, cb) =>
+    cb(null, `post-${Date.now()}${path.extname(file.originalname)}`),
 });
 
-// Configure storage for stories
+// === Storage for stories ===
 const storyStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/stories/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `story-${Date.now()}${path.extname(file.originalname)}`);
-  }
+  destination: (req, file, cb) => cb(null, "uploads/stories/"),
+  filename: (req, file, cb) =>
+    cb(null, `story-${Date.now()}${path.extname(file.originalname)}`),
 });
 
-// Configure storage for profile images
+// === Storage for profile images ===
 const profileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/profiles/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `profile-${Date.now()}${path.extname(file.originalname)}`);
-  }
+  destination: (req, file, cb) => cb(null, "uploads/profiles/"),
+  filename: (req, file, cb) =>
+    cb(null, `profile-${Date.now()}${path.extname(file.originalname)}`),
 });
 
-// File filter
+// === File filter (only images/videos) ===
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
+  if (
+    file.mimetype.startsWith("image/") ||
+    file.mimetype.startsWith("video/")
+  ) {
     cb(null, true);
   } else {
-    cb(new Error('Only images and videos are allowed!'), false);
+    cb(new Error("Only images and videos are allowed!"), false);
   }
 };
 
-// Initialize uploads
-exports.uploadPost = multer({ 
-  storage: postStorage, 
+// === Exported upload middlewares ===
+exports.uploadPost = multer({
+  storage: postStorage,
   fileFilter,
-  limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit
+  limits: { fileSize: 50 * 1024 * 1024 },
 });
 
-exports.uploadStory = multer({ 
-  storage: storyStorage, 
+exports.uploadStory = multer({
+  storage: storyStorage,
   fileFilter,
-  limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit
+  limits: { fileSize: 50 * 1024 * 1024 },
 });
 
-exports.uploadProfile = multer({ 
-  storage: profileStorage, 
+exports.uploadProfile = multer({
+  storage: profileStorage,
   fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+  limits: { fileSize: 10 * 1024 * 1024 },
 });
